@@ -39,41 +39,78 @@
                 .replace(/>/g, '&gt;');
     }
   
+    function getCaretCharacterOffsetWithin(element) {
+      const selection = window.getSelection();
+      let caretOffset = 0;
+  
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        caretOffset = preCaretRange.toString().length;
+      }
+  
+      return caretOffset;
+    }
+  
+    function setCaretPosition(element, offset) {
+      const range = document.createRange();
+      const selection = window.getSelection();
+      let currentNode = null;
+      let currentOffset = 0;
+  
+      function traverseNodes(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const textLength = node.textContent.length;
+          if (currentOffset + textLength >= offset) {
+            currentNode = node;
+            offset -= currentOffset;
+            return true; // Found the position
+          }
+          currentOffset += textLength;
+        } else {
+          for (let i = 0; i < node.childNodes.length; i++) {
+            if (traverseNodes(node.childNodes[i])) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
+  
+      traverseNodes(element);
+  
+      if (currentNode) {
+        range.setStart(currentNode, offset);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+  
     function highlightText() {
       const editor = document.getElementById("editor");
   
-      // Save the cursor position
-      const selection = window.getSelection();
-      const range = selection.getRangeAt(0);
-      const cursorPosition = range.startOffset;
+      // Save the cursor position relative to text content
+      const caretPosition = getCaretCharacterOffsetWithin(editor);
   
       let text = editor.innerText;
       text = escapeHTML(text);
   
+      // Highlight words
       wordsToHighlight.forEach(word => {
         const regex = new RegExp(`\\b(${word})\\b`, 'gi');
         text = text.replace(regex, '<span class="highlight">$1</span>');
       });
   
-      // Update the content
+      // Update content
       editor.innerHTML = text;
   
-      // Restore the cursor position
-      const newRange = document.createRange();
-      const childNodes = editor.childNodes;
-  
-      if (childNodes.length > 0) {
-        let node = childNodes[childNodes.length - 1];
-        newRange.setStart(node, Math.min(cursorPosition, node.length));
-        newRange.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      }
+      // Restore cursor to original position
+      setCaretPosition(editor, caretPosition);
     }
   
     document.getElementById("editor").addEventListener("input", highlightText);
   </script>
   
-
-</body>
-</html>
