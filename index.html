@@ -31,37 +31,49 @@
 <div id="editor" contenteditable="true"></div>
 
 <script>
-  // List of words to highlight (like misspelled words)
-  const wordsToHighlight = ["apple", "banana", "grapefruit"];
-
-  // Function to escape HTML characters
-  function escapeHTML(str) {
-    return str.replace(/&/g, '&amp;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;');
-  }
-
-  // Function to highlight words
-  function highlightText() {
-    const editor = document.getElementById("editor");
-    let text = editor.innerText;
-
-    // Escape HTML to prevent XSS attacks
-    text = escapeHTML(text);
-
-    // Replace words with highlighted spans
-    wordsToHighlight.forEach(word => {
-      const regex = new RegExp(`\\b(${word})\\b`, 'gi');
-      text = text.replace(regex, '<span class="highlight">$1</span>');
-    });
-
-    // Replace the editor's HTML with the highlighted text
-    editor.innerHTML = text;
-  }
-
-  // Event listener for input
-  document.getElementById("editor").addEventListener("input", highlightText);
-</script>
+    const wordsToHighlight = ["apple", "banana", "grapefruit"];
+  
+    function escapeHTML(str) {
+      return str.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+    }
+  
+    function highlightText() {
+      const editor = document.getElementById("editor");
+  
+      // Save the cursor position
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      const cursorPosition = range.startOffset;
+  
+      let text = editor.innerText;
+      text = escapeHTML(text);
+  
+      wordsToHighlight.forEach(word => {
+        const regex = new RegExp(`\\b(${word})\\b`, 'gi');
+        text = text.replace(regex, '<span class="highlight">$1</span>');
+      });
+  
+      // Update the content
+      editor.innerHTML = text;
+  
+      // Restore the cursor position
+      const newRange = document.createRange();
+      const childNodes = editor.childNodes;
+  
+      if (childNodes.length > 0) {
+        let node = childNodes[childNodes.length - 1];
+        newRange.setStart(node, Math.min(cursorPosition, node.length));
+        newRange.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+      }
+    }
+  
+    document.getElementById("editor").addEventListener("input", highlightText);
+  </script>
+  
 
 </body>
 </html>
