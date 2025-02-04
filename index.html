@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Online Text Editor</title>
+  <title>Thoughtcrime Checker</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -27,41 +27,41 @@
 </head>
 <body>
 
-<h2>Simple Online Text Editor</h2>
+<h2>Thoughtcrime Checker</h2>
 <div id="editor" contenteditable="true"></div>
 
-<script src="script.js"></script>
+<script>
+  // List of words to highlight (like misspelled words)
+  const wordsToHighlight = ["apple", "banana", "grapefruit"];
+
+  // Function to escape HTML characters
+  function escapeHTML(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;');
+  }
+
+  // Function to highlight words
+  function highlightText() {
+    const editor = document.getElementById("editor");
+    let text = editor.innerText;
+
+    // Escape HTML to prevent XSS attacks
+    text = escapeHTML(text);
+
+    // Replace words with highlighted spans
+    wordsToHighlight.forEach(word => {
+      const regex = new RegExp(`\\b(${word})\\b`, 'gi');
+      text = text.replace(regex, '<span class="highlight">$1</span>');
+    });
+
+    // Replace the editor's HTML with the highlighted text
+    editor.innerHTML = text;
+  }
+
+  // Event listener for input
+  document.getElementById("editor").addEventListener("input", highlightText);
+</script>
 
 </body>
 </html>
-
-// List of words to highlight (like misspelled words)
-const wordsToHighlight = ["apple", "banana", "grapefruit"];
-
-// Function to escape HTML characters
-function escapeHTML(str) {
-  return str.replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-}
-
-// Function to highlight words
-function highlightText() {
-  const editor = document.getElementById("editor");
-  let text = editor.innerText;
-
-  // Escape HTML to prevent XSS attacks
-  text = escapeHTML(text);
-
-  // Replace words with highlighted spans
-  wordsToHighlight.forEach(word => {
-    const regex = new RegExp(`\\b(${word})\\b`, 'gi');
-    text = text.replace(regex, '<span class="highlight">$1</span>');
-  });
-
-  // Replace the editor's HTML with the highlighted text
-  editor.innerHTML = text;
-}
-
-// Event listener for input
-document.getElementById("editor").addEventListener("input", highlightText);
