@@ -17,6 +17,7 @@
       font-size: 16px;
       outline: none;
       overflow-y: auto;
+      white-space: pre-wrap;  /* Fix for Firefox spaces issue */
     }
     .highlight {
       text-decoration: underline;
@@ -28,7 +29,8 @@
 <body>
 
 <h2>Thoughtcrime Checker</h2>
-<div id="editor" contenteditable="true"></div>
+<div id="editor" contenteditable="true" spellcheck="false"></div>
+
 
 <!-- Description of the project -->
 <div id="description">
@@ -130,6 +132,11 @@
       // Update content
       editor.innerHTML = text;
   
+    // If the editor is empty, ensure a zero-width space is there
+    if (editor.innerHTML === '') {
+      editor.innerHTML = '&#8203;';
+    }
+
       // Restore cursor to original position
       setCaretPosition(editor, caretPosition);
     }
@@ -137,3 +144,5 @@
     document.getElementById("editor").addEventListener("input", highlightText);
   </script>
   
+</body>
+</html>
