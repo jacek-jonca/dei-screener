@@ -30,8 +30,31 @@
 <h2>Thoughtcrime Checker</h2>
 <div id="editor" contenteditable="true"></div>
 
+<!-- Description of the project -->
+<div id="description">
+    <h3>Paste your grant abstract into the text editor above and the Thoughtcrime Checker will underline any words 
+        on the <a href="https://bsky.app/profile/jfmclaughlin92.bsky.social/post/3lhd4eswp322v" target="_blank">Banned List!</a></h3>
+    <p>
+       Edit your grant to remove these words and see if you can avoid the Thought Police!
+</p> 
+  </div>
+
+  <!-- Add this at the very bottom of your body section -->
+<img src="thinkpol_logo.png" alt="Thinkpol logo" style="display: block; margin: 20px auto; max-width: 100%; height: auto;">
+
+<!-- Credits -->
+ <div id="credits">
+    <p>
+        Thoughtcrime Checker was created by <a href="https://bsky.app/profile/bradleyallf.bsky.social" target="_blank">Bradley Allf</a>, 
+      and was inspired by the <a href="https://splasho.com/upgoer5/" target="_blank">Up-Goer Five Text Editor</a> by
+    <a href="https://bsky.app/profile/theo.io" target="_blank">Theo Sanderson</a>
+    (which was itself inspired by <a href="https://bsky.app/profile/xkcd.com" target="_blank">xkcd</a>). 
+    More details about the list <a href="https://www.washingtonpost.com/science/2025/02/04/national-science-foundation-trump-executive-orders-words/" target="_blank">here</a>.
+    </p>
+ </div>
+
 <script>
-    const wordsToHighlight = ["apple", "banana", "grapefruit"];
+    const wordsToHighlight = ["activism", "activists", "advocacy", "advocate", "advocates", "barrier", "barriers", "biased", "biased toward", "biases", "biases toward", "bipoc", "black and latinx", "community diversity", "community equity", "cultural differences", "cultural heritage", "culturally responsive", "disabilities", "disability", "discriminated", "discrimination", "diverse backgrounds", "diverse communities", "diverse community", "diverse group", "diverse groups", "diversified", "diversifying", "diversity and inclusion", "diversity equity", "enhance the diversity", "enhancing diversity", "equal opportunity", "equality", "equitable", "equity", "ethnicity", "excluded", "female", "females", "fostering inclusivity", "gender", "gender diversity", "genders", "hate speech", "hispanic minority", "historically", "implicity bias", "implicit biases", "inclusion", "inclusiveness", "inclusivity", "increase diversity", "increase the diversity","indigenous community", "inequalities", "institutional", "lgbt", "marginalize", "marginalized", "minorities", "minority", "multicultural", "polarization", "political", "prejudice", "privileges", "promoting diversity", "race and ethnicity", "racial", "racial diversity", "racial inequality", "racial justice", "racially", "racism", "sense of belonging", "sexual preferences", "social justice", "socio cultural", "socioeconomic", "status", "stereotypes", "systemic", "trauma", "under appreciated", "under represented", "under served", "underrepresentation", "underrepresented", "underserved", "undervalued", "victim", "women", "women and underrepresented"];
   
     function escapeHTML(str) {
       return str.replace(/&/g, '&amp;')
