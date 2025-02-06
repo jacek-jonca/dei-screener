@@ -119,100 +119,105 @@ img {
 </div>
 
 <script>
+  let wordsToHighlight = []; // Declare globally
 
-    fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
+  fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
     .then(response => response.json())
-    .then(wordsToHighlight => {
-        // Use the array 'wordsToHighlight'
-        console.log(wordsToHighlight); 
+    .then(words => {
+        wordsToHighlight = words; // Assign globally
+        console.log(wordsToHighlight);
     })
     .catch(error => console.error('Error:', error));
   
-    function escapeHTML(str) {
-      return str.replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
+  function escapeHTML(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;');
+  }
+
+  function getCaretCharacterOffsetWithin(element) {
+    const selection = window.getSelection();
+    let caretOffset = 0;
+
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const preCaretRange = range.cloneRange();
+      preCaretRange.selectNodeContents(element);
+      preCaretRange.setEnd(range.endContainer, range.endOffset);
+      caretOffset = preCaretRange.toString().length;
     }
-  
-    function getCaretCharacterOffsetWithin(element) {
-      const selection = window.getSelection();
-      let caretOffset = 0;
-  
-      if (selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        const preCaretRange = range.cloneRange();
-        preCaretRange.selectNodeContents(element);
-        preCaretRange.setEnd(range.endContainer, range.endOffset);
-        caretOffset = preCaretRange.toString().length;
-      }
-  
-      return caretOffset;
-    }
-  
-    function setCaretPosition(element, offset) {
-      const range = document.createRange();
-      const selection = window.getSelection();
-      let currentNode = null;
-      let currentOffset = 0;
-  
-      function traverseNodes(node) {
-        if (node.nodeType === Node.TEXT_NODE) {
-          const textLength = node.textContent.length;
-          if (currentOffset + textLength >= offset) {
-            currentNode = node;
-            offset -= currentOffset;
-            return true; // Found the position
-          }
-          currentOffset += textLength;
-        } else {
-          for (let i = 0; i < node.childNodes.length; i++) {
-            if (traverseNodes(node.childNodes[i])) {
-              return true;
-            }
+
+    return caretOffset;
+  }
+
+  function setCaretPosition(element, offset) {
+    const range = document.createRange();
+    const selection = window.getSelection();
+    let currentNode = null;
+    let currentOffset = 0;
+
+    function traverseNodes(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const textLength = node.textContent.length;
+        if (currentOffset + textLength >= offset) {
+          currentNode = node;
+          offset -= currentOffset;
+          return true;
+        }
+        currentOffset += textLength;
+      } else {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          if (traverseNodes(node.childNodes[i])) {
+            return true;
           }
         }
-        return false;
       }
-  
-      traverseNodes(element);
-  
-      if (currentNode) {
-        range.setStart(currentNode, offset);
-        range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
+      return false;
     }
-  
-    function highlightText() {
-      const editor = document.getElementById("editor");
-  
-      // Save the cursor position relative to text content
-      const caretPosition = getCaretCharacterOffsetWithin(editor);
-  
-      let text = editor.innerText;
-      text = escapeHTML(text);
-  
-      // Highlight words
+
+    traverseNodes(element);
+
+    if (currentNode) {
+      range.setStart(currentNode, offset);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+
+  function highlightText() {
+    const editor = document.getElementById("editor");
+
+    if (!editor) {
+      console.error("Editor not found.");
+      return;
+    }
+
+    const caretPosition = getCaretCharacterOffsetWithin(editor);
+    let text = editor.textContent; // Use textContent for better reliability
+
+    text = escapeHTML(text);
+
+    if (wordsToHighlight.length > 0) {
       wordsToHighlight.forEach(word => {
         const regex = new RegExp(`\\b(${word})\\b`, 'gi');
         text = text.replace(regex, '<span class="highlight">$1</span>');
       });
-  
-      // Update content
-      editor.innerHTML = text;
-  
-    // If the editor is empty, ensure a zero-width space is there
-    if (editor.innerHTML === '') {
+    }
+
+    editor.innerHTML = text;
+
+    // Ensure the editor has content to maintain focus
+    if (editor.innerHTML.trim() === '') {
       editor.innerHTML = '&#8203;';
     }
 
-      // Restore cursor to original position
-      setCaretPosition(editor, caretPosition);
-    }
-  
-    document.getElementById("editor").addEventListener("input", highlightText);
-  </script>
+    setCaretPosition(editor, caretPosition);
+  }
+
+  document.getElementById("editor").addEventListener("input", highlightText);
+</script>
+
   
 </body>
 </html>
