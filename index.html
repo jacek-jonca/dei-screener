@@ -7,29 +7,96 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      background-color: #7a1519; /* Dark red background */
+      color: white; /* Optional: Make text white for better contrast */
+    }
+    .container {
+      max-width: 800px; /* Restrict content width */
+      margin: 40px auto; /* Center the content */
+      padding: 20px;
+    }
+
+
+
+
+    h2 {
+      text-align: center;
     }
     #editor {
       width: 100%;
+      max-width: 100%; /* Prevents overflow */
       height: 300px;
       border: 1px solid #ccc;
-      padding: 10px;
+      padding: 15px;
       font-size: 16px;
       outline: none;
       overflow-y: auto;
       white-space: pre-wrap;  /* Fix for Firefox spaces issue */
+      background-color: white; /* Keep text box background white */
+      color: black; /* Ensure text inside is black for readability */
+      border-radius: 8px; /* Smooth corners */
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
     }
     .highlight {
       text-decoration: underline;
       text-decoration-color: red;
       text-decoration-style: wavy;
     }
+    /* Change default link colors */
+a {
+  color: #ffcc00; /* Bright yellow for good contrast */
+  text-decoration: none; /* Remove underline (optional) */
+  font-weight: bold;
+}
+
+/* Change link color when hovered */
+a:hover {
+  color: #ffffff; /* Turns white when hovered */
+  text-decoration: underline; /* Underline on hover for visibility */
+}
+
+/* Description box styling */
+#description {
+      margin-top: 0px;
+      padding: 15px;
+      background-color: #7a1519;
+      border-left: 4px solid #7a1519;
+      color: white;
+      border-radius: 5px;
+    }
+
+/* Center and adjust the logo */
+img {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px; /* Slightly rounded corners */
+    }
+
+    /* Credits section styling */
+    #credits {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
   </style>
 </head>
 <body>
 
-<h2>Thoughtcrime Checker</h2>
-<div id="editor" contenteditable="true" spellcheck="false"></div>
+  <div class="container">
+    
+    <nav style="text-align: left; margin-bottom: 20px;">
+      <a href="index.html" style="margin-right: 20px; color: #ffcc00; text-decoration: none; font-weight: bold;">Home</a>
+      <a href="banned-words.html" style="color: #ffcc00; text-decoration: none; font-weight: bold;">Banned Words List</a>
+    </nav>
+    
+    <h2>Thoughtcrime Checker</h2>
+    
+    <div id="editor" contenteditable="true" spellcheck="false"></div>
+    
 
 
 <!-- Description of the project -->
@@ -54,9 +121,10 @@
     More details about the list <a href="https://www.washingtonpost.com/science/2025/02/04/national-science-foundation-trump-executive-orders-words/" target="_blank">here</a>.
     </p>
  </div>
+</div>
 
 <script>
-    const wordsToHighlight = ["activism", "activists", "advocacy", "advocate", "advocates", "barrier", "barriers", "biased", "biased toward", "biases", "biases toward", "bipoc", "black and latinx", "community diversity", "community equity", "cultural differences", "cultural heritage", "culturally responsive", "disabilities", "disability", "discriminated", "discrimination", "diverse backgrounds", "diverse communities", "diverse community", "diverse group", "diverse groups", "diversified", "diversifying", "diversity and inclusion", "diversity equity", "enhance the diversity", "enhancing diversity", "equal opportunity", "equality", "equitable", "equity", "ethnicity", "excluded", "female", "females", "fostering inclusivity", "gender", "gender diversity", "genders", "hate speech", "hispanic minority", "historically", "implicity bias", "implicit biases", "inclusion", "inclusiveness", "inclusivity", "increase diversity", "increase the diversity","indigenous community", "inequalities", "institutional", "lgbt", "marginalize", "marginalized", "minorities", "minority", "multicultural", "polarization", "political", "prejudice", "privileges", "promoting diversity", "race and ethnicity", "racial", "racial diversity", "racial inequality", "racial justice", "racially", "racism", "sense of belonging", "sexual preferences", "social justice", "socio cultural", "socioeconomic", "status", "stereotypes", "systemic", "trauma", "under appreciated", "under represented", "under served", "underrepresentation", "underrepresented", "underserved", "undervalued", "victim", "women", "women and underrepresented"];
+    const wordsToHighlight = ["accessibility", "activism", "activists", "advocacy", "advocate", "advocates", "antiracist", "assigned female at birth", "assigned male at birth", "barrier", "barriers", "biased", "biased toward", "biases", "biases toward", "biologically male", "biologically female", "bipoc", "black and latinx", "community diversity", "community equity", "cultural differences", "cultural heritage", "cultural relevance", "culturally responsive", "disabilities", "disability", "discriminated", "discrimination", "diverse backgrounds", "diverse communities", "diverse community", "diverse group", "diverse groups", "diversified", "diversifying", "diversity", "diversity and inclusion", "diversity equity", "enhance the diversity", "enhancing diversity", "equal opportunity", "equality", "equitable", "equity", "ethnicity", "excluded", "exclusion", "female", "females", "fostering inclusivity", "gender", "gender diversity", "genders", "hate speech", "hispanic minority", "historically", "implicity bias", "implicit bias", "implicit biases", "inclusion", "inclusive", "inclusiveness", "inclusivity", "increase diversity", "increase the diversity","indigenous community", "inequalities", "inequities", "institutional", "intersectional", "lgbt", "lgbtq", "lgbtqia", "male dominated", "marginalize", "marginalized", "minorities", "minority", "multicultural", "nonbinary", "non-binary", "non binary", "oppression", "pregnant person", "pregnant people", "polarization", "political", "prejudice", "privileges", "promoting diversity", "race and ethnicity", "racial", "racial diversity", "racial inequality", "racial justice", "racially", "racism", "segregation", "sense of belonging", "sexual preferences", "social justice", "socio cultural", "socioeconomic", "status", "stereotypes", "systemic", "they/them", "transgender", "transsexual", "trauma", "under appreciated", "under represented", "underrepresented", "under served", "underserved", "underrepresentation", "underrepresented", "underserved", "undervalued", "victim", "victims", "women", "women and underrepresented"];
   
     function escapeHTML(str) {
       return str.replace(/&/g, '&amp;')
