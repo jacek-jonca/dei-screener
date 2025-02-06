@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thoughtcrime Checker</title>
+  <title>DEI Risk Screener</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background-color: #7a1519; /* Dark red background */
+      background-color: #582c83; /* PV purple background */
       color: white; /* Optional: Make text white for better contrast */
     }
     .container {
@@ -17,16 +17,13 @@
       padding: 20px;
     }
 
-
-
-
     h2 {
       text-align: center;
     }
     #editor {
       width: 100%;
       max-width: 100%; /* Prevents overflow */
-      height: 300px;
+      height: 400px;
       border: 1px solid #ccc;
       padding: 15px;
       font-size: 16px;
@@ -40,12 +37,12 @@
     }
     .highlight {
       text-decoration: underline;
-      text-decoration-color: red;
+      text-decoration-color: #582c83;
       text-decoration-style: wavy;
     }
     /* Change default link colors */
 a {
-  color: #ffcc00; /* Bright yellow for good contrast */
+  color: #eaaa00; /* PV gold */
   text-decoration: none; /* Remove underline (optional) */
   font-weight: bold;
 }
@@ -60,8 +57,8 @@ a:hover {
 #description {
       margin-top: 0px;
       padding: 15px;
-      background-color: #7a1519;
-      border-left: 4px solid #7a1519;
+      background-color: #582c83;
+      border-left: 4px solid #582c83;
       color: white;
       border-radius: 5px;
     }
@@ -79,7 +76,7 @@ img {
     #credits {
       text-align: center;
       margin-top: 20px;
-      font-size: 14px;
+      font-size: 10px;
     }
 
   </style>
@@ -89,46 +86,189 @@ img {
   <div class="container">
     
     <nav style="text-align: left; margin-bottom: 20px;">
-      <a href="index.html" style="margin-right: 20px; color: #ffcc00; text-decoration: none; font-weight: bold;">Home</a>
-      <a href="banned-words.html" style="color: #ffcc00; text-decoration: none; font-weight: bold;">Banned Words List</a>
+<!--      <a href="index.html" style="margin-right: 20px; color: #eaaa00; text-decoration: none; font-weight: bold;">Home</a>
+      <a href="words.html" style="color: #eaaa00; text-decoration: none; font-weight: bold;">Screening List</a>
+-->
     </nav>
     
-    <h2>Thoughtcrime Checker</h2>
-    
-    <div id="editor" contenteditable="true" spellcheck="false"></div>
-    
-
+    <h2>DEI Risk Screener</h2>
 
 <!-- Description of the project -->
 <div id="description">
-    <h3>Greetings, comrade! Paste your grant abstract into the text editor above and 
-      Thoughtcrime Checker will underline any words on the 
-      <a href="https://bsky.app/profile/jfmclaughlin92.bsky.social/post/3lhd4eswp322v" target="_blank">Banned List!</a></h3>
-    <p>
-       Simply remove the offending words and you might evade the Thought Police!
-</p> 
-  </div>
+  <h3>Paste your grant TITLE, ABSTRACT, PROJECT SUMMARY, PROJECT DESCRIPTION or the combination of those into the text editor.</h3>
+  <p>
+    <ul>
+      <li>This page will underline any words *may* result in your proposal being flagged. It is not a guarantee.</li>
+      <li>The grant process can be competetive. With large number of proposals there is a risk that flagged proposals may end up excluded during early stages of Sponsor's review. Consider that risk.</li>
+      <li>Because meaning of words often depends on the context, expect to see a fair share of false positives.</li>
+      <li>Please don't blindly follow this tool's recommendations, please exercise your best judgement.</li>
+      <li>This tool is meant to make you more mindful of how your proposal may be interpreted. It is just a tool, not a policy, and not a guideline.</li>
+    </ul>
+  </p> 
+</div>
 
-  <!-- Add this at the very bottom of your body section -->
-<img src="thinkpol_logo.png" alt="Thinkpol logo" style="display: block; margin: 20px auto; max-width: 100%; height: auto;">
+    <div id="editor" contenteditable="true" spellcheck="false"></div>
 
 <!-- Credits -->
  <div id="credits">
     <p>
-        Thoughtcrime Checker was created by <a href="https://bsky.app/profile/bradleyallf.bsky.social" target="_blank">Bradley Allf</a>, 
-      and was inspired by the <a href="https://splasho.com/upgoer5/" target="_blank">Up-Goer Five Text Editor</a> by
-    <a href="https://bsky.app/profile/theo.io" target="_blank">Theo Sanderson</a>
-    (which was itself inspired by <a href="https://bsky.app/profile/xkcd.com" target="_blank">xkcd</a>). 
-    More details about the list <a href="https://www.washingtonpost.com/science/2025/02/04/national-science-foundation-trump-executive-orders-words/" target="_blank">here</a>.
-    While this started out as a joke, apparently people are finding it useful so I'm trying to keep it current. If you have
-    inside knowledge of other words I should add to the list, have ideas for new features, or if you find bugs, feel free to
-    <a href="https://bradleyallf.com/contact/" target="_blank">reach out</a>.
+    CREDITS: DEI Screener is a fork of Thoughtcrime Checker by <a href="https://bradleyallf.com/contact/" target="_blank">Bradley Allf</a>.
+    Thoughtcrime Checker was inspired by the <a href="https://splasho.com/upgoer5/" target="_blank">Up-Goer Five Text Editor</a> by <a href="https://bsky.app/profile/theo.io" target="_blank">Theo Sanderson</a>
+    Up-Goer Five Text Editor was inspired by XKCD.
     </p>
  </div>
 </div>
 
 <script>
-    const wordsToHighlight = ["accessibility", "activism", "activists", "advocacy", "advocate", "advocates", "antiracist", "assigned female at birth", "assigned male at birth", "barrier", "barriers", "biased", "biased toward", "biases", "biases toward", "biologically male", "biologically female", "bipoc", "black and latinx", "community diversity", "community equity", "cultural differences", "cultural heritage", "cultural relevance", "culturally responsive", "disabilities", "disability", "discriminated", "discrimination", "diverse backgrounds", "diverse communities", "diverse community", "diverse group", "diverse groups", "diversified", "diversifying", "diversity", "diversity and inclusion", "diversity equity", "enhance the diversity", "enhancing diversity", "equal opportunity", "equality", "equitable", "equity", "ethnicity", "excluded", "exclusion", "female", "females", "fostering inclusivity", "gender", "gender diversity", "genders", "hate speech", "hispanic minority", "historically", "implicity bias", "implicit bias", "implicit biases", "inclusion", "inclusive", "inclusiveness", "inclusivity", "increase diversity", "increase the diversity","indigenous community", "inequalities", "inequities", "institutional", "intersectional", "lgbt", "lgbtq", "lgbtqia", "male dominated", "marginalize", "marginalized", "minorities", "minority", "multicultural", "nonbinary", "non-binary", "non binary", "oppression", "pregnant person", "pregnant people", "polarization", "political", "prejudice", "privileges", "promoting diversity", "race and ethnicity", "racial", "racial diversity", "racial inequality", "racial justice", "racially", "racism", "segregation", "sense of belonging", "sexual preferences", "social justice", "socio cultural", "socioeconomic", "status", "stereotypes", "systemic", "they/them", "transgender", "transsexual", "trauma", "under appreciated", "under represented", "underrepresented", "under served", "underserved", "underrepresentation", "underrepresented", "underserved", "undervalued", "victim", "victims", "women", "women and underrepresented"];
+    const wordsToHighlight = [
+      "activism",
+      "activists",
+      "advocacy",
+      "advocate",
+      "advocates",
+      "antiracist",
+      "assigned female at birth",
+      "assigned male at birth",
+      "barrier",
+      "barriers",
+      "biased toward",
+      "biased",
+      "biases toward",
+      "biases towards",
+      "biases",
+      "biologically female",
+      "biologically male",
+      "bipoc",
+      "black and latinx",
+      "black",
+      "community diversity",
+      "community equity",
+      "cultural differences",
+      "cultural heritage",
+      "cultural relevance",
+      "culturally responsive",
+      "disabilities",
+      "disability",
+      "discriminated",
+      "discrimination",
+      "discriminatory",
+      "diverse background",
+      "diverse backgrounds",
+      "diverse communities",
+      "diverse community",
+      "diverse group",
+      "diverse groups",
+      "diversified",
+      "diversify",
+      "diversifying",
+      "diversity and inclusion",
+      "diversity equity",
+      "diversity",
+      "enhance the diversity",
+      "enhancing diversity",
+      "equal opportunity",
+      "equality",
+      "equitable",
+      "equity",
+      "ethnicity",
+      "excluded female",
+      "excluded females",
+      "excluded",
+      "exclusion",
+      "female",
+      "females",
+      "fostering inclusivity",
+      "gender diversity",
+      "gender",
+      "genders",
+      "hate speech",
+      "hispanic minority",
+      "historically",
+      "implicit bias",
+      "implicit biases",
+      "implicity bias",
+      "inclusion",
+      "inclusive",
+      "inclusiveness",
+      "inclusivity",
+      "increase diversity",
+      "increase the diversity",
+      "indigenous community",
+      "inequalities",
+      "inequality",
+      "inequitable",
+      "inequities",
+      "institutional",
+      "intersectional",
+      "latinx",
+      "lgbt",
+      "lgbtq",
+      "lgbtqia",
+      "lgbtqx",
+      "male dominated",
+      "marginalize",
+      "marginalized",
+      "minorities",
+      "minority",
+      "multicultural",
+      "non binary",
+      "non-binary",
+      "nonbinary",
+      "oppression",
+      "polarization",
+      "political",
+      "pregnant people",
+      "pregnant person",
+      "prejudice",
+      "privileges",
+      "promoting diversity",
+      "race and ethnicity",
+      "racial diversity",
+      "racial inequality",
+      "racial justice",
+      "racial",
+      "racially",
+      "racism",
+      "segregation",
+      "sense of belonging",
+      "sexual preferences",
+      "social justice",
+      "socio cultural",
+      "socio economic",
+      "socio-cultural",
+      "socio-economic",
+      "sociocultural",
+      "socioeconomic",
+      "socioeconomic",
+      "status",
+      "stereotypes",
+      "systemic trauma",
+      "systemic",
+      "they/them",
+      "transgender",
+      "transsexual",
+      "trauma",
+      "under appreciated",
+      "under represented",
+      "under served",
+      "under valued",
+      "underappreciated",
+      "underrepresentation",
+      "underrepresented",
+      "underserved",
+      "undervalued",
+      "victim women",
+      "victim",
+      "victims",
+      "women and underrepresented",
+      "women",
+      "I&D",
+      "DEIB",
+      "EDIJ",
+      "DEIA",
+      "DEAI",
+      "DEI"
+    ];
   
     function escapeHTML(str) {
       return str.replace(/&/g, '&amp;')
