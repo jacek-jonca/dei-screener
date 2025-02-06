@@ -68,7 +68,7 @@
         return;
       }
 
-      wordsToHighlight.forEach(word => {
+      wordsToHighlight.sort().forEach(word => {
         const row = document.createElement("tr");
         const cell = document.createElement("td");
         cell.innerText = word;
