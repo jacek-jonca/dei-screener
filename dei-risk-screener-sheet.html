@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEI Risk Screener</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #582c83; /* PV purple background */
+      color: white; /* Optional: Make text white for better contrast */
+    }
+    .container {
+      max-width: 800px; /* Restrict content width */
+      margin: 40px auto; /* Center the content */
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+    #editor {
+      width: 100%;
+      max-width: 100%; /* Prevents overflow */
+      height: 400px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      font-size: 16px;
+      outline: none;
+      overflow-y: auto;
+      white-space: pre-wrap;  /* Fix for Firefox spaces issue */
+      background-color: white; /* Keep text box background white */
+      color: black; /* Ensure text inside is black for readability */
+      border-radius: 8px; /* Smooth corners */
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
+    }
+    .highlight {
+      text-decoration: underline;
+      text-decoration-color: #582c83;
+      text-decoration-style: wavy;
+    }
+    /* Change default link colors */
+a {
+  color: #eaaa00; /* PV gold */
+  text-decoration: none; /* Remove underline (optional) */
+  font-weight: bold;
+}
+
+/* Change link color when hovered */
+a:hover {
+  color: #ffffff; /* Turns white when hovered */
+  text-decoration: underline; /* Underline on hover for visibility */
+}
+
+/* Description box styling */
+#description {
+      margin-top: 0px;
+      padding: 15px;
+      background-color: #582c83;
+      border-left: 4px solid #582c83;
+      color: white;
+      border-radius: 5px;
+    }
+
+/* Center and adjust the logo */
+img {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px; /* Slightly rounded corners */
+    }
+
+    /* Credits section styling */
+    #credits {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <nav style="text-align: left; margin-bottom: 20px;">
+      <a href="index.html" style="margin-right: 20px; color: #eaaa00; text-decoration: none; font-weight: bold;">Home</a>
+      <a href="words.html" style="color: #eaaa00; text-decoration: none; font-weight: bold;">Screening Terms</a>
+    </nav>
+    
+    <h2>DEI Risk Screener</h2>
+
+<!-- Description of the project -->
+<div id="description">
+  <h3>Paste your grant TITLE, ABSTRACT, PROJECT SUMMARY, PROJECT DESCRIPTION, or a combination of those into the text editor.</h3>
+  <p>
+    <ul>
+      <li>This page will underline any words *may* result in your proposal being flagged. It is not a guarantee.</li>
+      <li>The grant process can be competitive. With a large volume of proposals, there is a risk that flagged proposals may end up excluded during the early stages of the Sponsor's review. Consider that risk.</li>
+      <li>Because the meaning of words often depends on the context, expect a fair share of false positives.</li>
+      <li>Please don't blindly follow this tool's recommendations. Please exercise your best judgment.</li>
+      <li>This tool is meant to make you more mindful of how your proposal may be interpreted. It is just a tool, not a policy, and not a guideline.</li>
+    </ul>
+  </p> 
+</div>
+
+    <div id="editor" contenteditable="true" spellcheck="false"></div>
+
+<!-- Credits -->
+ <div id="credits">
+    <p>
+    CREDITS: DEI Screener is a fork of Thoughtcrime Checker by <a href="https://bradleyallf.com/contact/" target="_blank">Bradley Allf</a>.
+    Thoughtcrime Checker was inspired by the <a href="https://splasho.com/upgoer5/" target="_blank">Up-Goer Five Text Editor</a> by <a href="https://bsky.app/profile/theo.io" target="_blank">Theo Sanderson</a>
+    Up-Goer Five Text Editor was inspired by XKCD.
+    </p>
+ </div>
+</div>
+
+<script>
+  let wordsToHighlight = []; // Declare globally
+
+  fetch('https://sheets.googleapis.com/v4/spreadsheets/1Z31V72-ahHfrh2KF_Olv250y0VaND9Fr_uV7PU0l9RQ/values/Sheet1?alt=json&key=AIzaSyCMQkC2sI7sC7sDETsvrnXNlVTnYLffsmg')
+    .then(response => response.json())
+    .then(words => {
+        wordsToHighlight = words.values.map(item => item[0]); // Assign globally and Extract the words into a simple array
+        console.log(wordsToHighlight);
+    })
+    .catch(error => console.error('Error:', error));
+
+  function escapeHTML(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;');
+  }
+
+  function getCaretCharacterOffsetWithin(element) {
+    const selection = window.getSelection();
+    let caretOffset = 0;
+
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const preCaretRange = range.cloneRange();
+      preCaretRange.selectNodeContents(element);
+      preCaretRange.setEnd(range.endContainer, range.endOffset);
+      caretOffset = preCaretRange.toString().length;
+    }
+
+    return caretOffset;
+  }
+
+  function setCaretPosition(element, offset) {
+    const range = document.createRange();
+    const selection = window.getSelection();
+    let currentNode = null;
+    let currentOffset = 0;
+
+    function traverseNodes(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const textLength = node.textContent.length;
+        if (currentOffset + textLength >= offset) {
+          currentNode = node;
+          offset -= currentOffset;
+          return true;
+        }
+        currentOffset += textLength;
+      } else {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          if (traverseNodes(node.childNodes[i])) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    traverseNodes(element);
+
+    if (currentNode) {
+      range.setStart(currentNode, offset);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+
+  function highlightText() {
+    const editor = document.getElementById("editor");
+
+    if (!editor) {
+      console.error("Editor not found.");
+      return;
+    }
+
+    const caretPosition = getCaretCharacterOffsetWithin(editor);
+    let text = editor.textContent; // Use textContent for better reliability
+
+    text = escapeHTML(text);
+
+    if (wordsToHighlight.length > 0) {
+      wordsToHighlight.forEach(word => {
+        const regex = new RegExp(`\\b(${word})\\b`, 'gi');
+        text = text.replace(regex, '<span class="highlight">$1</span>');
+      });
+    }
+
+    editor.innerHTML = text;
+
+    // Ensure the editor has content to maintain focus
+    if (editor.innerHTML.trim() === '') {
+      editor.innerHTML = '&#8203;';
+    }
+
+    setCaretPosition(editor, caretPosition);
+  }
+
+  document.getElementById("editor").addEventListener("input", highlightText);
+</script>
+
+  
+</body>
+</html>
