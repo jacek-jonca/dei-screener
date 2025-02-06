@@ -56,13 +56,14 @@
 </div>
 
 <script>
-  fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
-  .then(response => response.json())
-  .then(wordsToHighlight => {
-       // Use the array 'wordsToHighlight'
+
+    fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
+    .then(response => response.json())
+    .then(wordsToHighlight => {
+        // Use the array 'wordsToHighlight'
         console.log(wordsToHighlight); 
-  })
-  .catch(error => console.error('Error:', error));
+    })
+    .catch(error => console.error('Error:', error));
   
   const tableBody = document.getElementById("wordsToHighlightBody");
   wordsToHighlight.forEach(word => {
