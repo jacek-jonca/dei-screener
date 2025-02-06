@@ -56,23 +56,27 @@
 </div>
 
 <script>
+  fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
+  .then(response => response.json())
+  .then(wordsToHighlight => {
+      console.log(wordsToHighlight); // Check if the data is retrieved correctly
 
-    fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
-    .then(response => response.json())
-    .then(wordsToHighlight => {
-        // Use the array 'wordsToHighlight'
-        console.log(wordsToHighlight); 
-    })
-    .catch(error => console.error('Error:', error));
-  
-  const tableBody = document.getElementById("wordsToHighlightBody");
-  wordsToHighlight.forEach(word => {
-    const row = document.createElement("tr");
-    const cell = document.createElement("td");
-    cell.innerText = word;
-    row.appendChild(cell);
-    tableBody.appendChild(row);
-  });
+      const tableBody = document.getElementById("wordsToHighlightBody");
+
+      if (!tableBody) {
+        console.error("Error: Table body element not found.");
+        return;
+      }
+
+      wordsToHighlight.forEach(word => {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.innerText = word;
+        row.appendChild(cell);
+        tableBody.appendChild(row);
+      });
+  })
+  .catch(error => console.error('Error:', error));
 </script>
 
 </body>
