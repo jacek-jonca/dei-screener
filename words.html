@@ -56,10 +56,15 @@
 </div>
 
 <script>
-  fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
+  fetch('https://sheets.googleapis.com/v4/spreadsheets/1Z31V72-ahHfrh2KF_Olv250y0VaND9Fr_uV7PU0l9RQ/values/Sheet1?alt=json&key=AIzaSyCMQkC2sI7sC7sDETsvrnXNlVTnYLffsmg')
   .then(response => response.json())
-  .then(wordsToHighlight => {
+  .then(words => {
+      wordsToHighlight = words.values.map(item => item[0]); // Assign globally and Extract the words into a simple array
       console.log(wordsToHighlight); // Check if the data is retrieved correctly
+//  fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
+//  .then(response => response.json())
+//  .then(wordsToHighlight => {
+//      console.log(wordsToHighlight); // Check if the data is retrieved correctly
 
       const tableBody = document.getElementById("wordsToHighlightBody");
 
