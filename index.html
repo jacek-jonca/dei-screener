@@ -120,14 +120,20 @@ img {
 
 <script>
   let wordsToHighlight = []; // Declare globally
-
-  fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
+  fetch('https://sheets.googleapis.com/v4/spreadsheets/1Z31V72-ahHfrh2KF_Olv250y0VaND9Fr_uV7PU0l9RQ/values/Sheet1?alt=json&key=AIzaSyCMQkC2sI7sC7sDETsvrnXNlVTnYLffsmg')
     .then(response => response.json())
     .then(words => {
-        wordsToHighlight = words; // Assign globally
+        wordsToHighlight = words.values.map(item => item[0]); // Assign globally and Extract the words into a simple array
         console.log(wordsToHighlight);
     })
     .catch(error => console.error('Error:', error));
+//  fetch('https://corsproxy.io/?url=https://raw.githubusercontent.com/jacek-jonca/dei-screener/refs/heads/main/words.json')
+//    .then(response => response.json())
+//    .then(words => {
+//        wordsToHighlight = words; // Assign globally
+//        console.log(wordsToHighlight);
+//    })
+//    .catch(error => console.error('Error:', error));
   
   function escapeHTML(str) {
     return str.replace(/&/g, '&amp;')
